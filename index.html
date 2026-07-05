@@ -1,149 +1,459 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="de" lang="de">
+<!DOCTYPE html>
+<html lang="en">
 <head>
-<title>Daniel Moser</title>
-<SCRIPT LANGUAGE="JavaScript">
-    today=new Date();
-    y0=today.getFullYear();
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Daniel Moser - Portfolio</title>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        /* =========================
+           STYLES
+           ========================= */
+        
+        :root {
+            --bg-color: #f4f4f4;
+            --text-color: #1a1a1a;
+            --accent-color: #df5d22; /* Burnt orange derived from screenshots */
+            --sidebar-width: 60px;
+            --padding-mobile: 24px;
+            --padding-desktop: 40px;
+        }
 
-</SCRIPT>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
-<STYLE type="text/css">
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            overflow-x: hidden;
+        }
 
+        a {
+            color: inherit;
+            text-decoration: none;
+            transition: opacity 0.2s ease;
+        }
 
+        a:hover {
+            opacity: 0.7;
+        }
 
+        /* Layout */
+        #main-content {
+            margin-right: var(--sidebar-width);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
 
+        /* Sidebar */
+        #sidebar {
+            position: fixed;
+            top: 0;
+            right: 0;
+            width: var(--sidebar-width);
+            height: 100vh;
+            background-color: var(--accent-color);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 100;
+        }
 
-A:link {text-decoration: none ; color:black}
-A:visited {text-decoration: none ; color:black}
-A:active {text-decoration: none}
-A:hover {text-decoration: underline ; color: black;}
+        .sidebar-text {
+            writing-mode: vertical-rl;
+            color: var(--text-color);
+            font-size: 1.5rem;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+            white-space: nowrap;
+        }
 
-#container {
-  position: absolute;
-   top: 0;
-   right: 0;
-   bottom: 0;
-   left: 0;
-   width: 70%;
-   height: 60%;
-   margin: auto;
-   text-align:center;
-   vertical-align:center;
-}
-#Name {
- text-align:center;
-  font-family:Helvetica,Arial;
-  font-size:434%;
-  letter-spacing:3px;
-  font-weight: 200;
-  }
+        /* Hero Section (CRT TV / Video Simulation) */
+        #hero {
+            width: 100%;
+            position: relative;
+            background-color: #050505;
+            overflow: hidden;
+        }
 
-   #Name:hover
-   {font-weight: 300;
+        .crt-viewport {
+            width: 100%;
+            height: 80vh;
+            position: relative;
+            overflow: hidden;
+        }
 
-  }
+        .crt-frame {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            opacity: 0;
+            transition: filter 0.5s ease;
+        }
 
+        .crt-frame.active {
+            opacity: 1;
+        }
 
-#Detail {
+        /* Old CRT Effects Layers */
+        .crt-scanlines {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06));
+            background-size: 100% 4px, 6px 100%;
+            z-index: 10;
+            pointer-events: none;
+        }
 
-   margin-left: 0%;
-   text-align: center;
-   font-size:100%;
-     letter-spacing:1px;
-     color:#5882A0;
-     font-weight: 100;
-   font-family:Helvetica,Arial;
+        .crt-flicker {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(18, 16, 16, 0.1);
+            opacity: 0;
+            z-index: 11;
+            pointer-events: none;
+        }
 
-}
+        .glitching .crt-flicker {
+            animation: crt-flicker-anim 0.15s infinite;
+        }
 
-#Detail:hover {
- }
+        .glitching .crt-frame.active {
+            animation: crt-displacement 0.1s infinite;
+            filter: contrast(1.7) brightness(1.2) saturate(1.5);
+        }
 
+        /* Brown Sunglasses Filter Tint Effect */
+        .sunglasses-tint {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(153, 91, 36, 0.28); /* Warm brown amber tone */
+            mix-blend-mode: multiply;
+            opacity: 0;
+            transition: opacity 1s ease-in-out;
+            z-index: 12;
+            pointer-events: none;
+        }
 
-#Contact {
-   margin-left: 0%;
-   margin-top: -1px;
-   font-size:115%;
-   font-weight: 120;
-   line-height:180%;
-  text-shadow: #FFFFFF 2px 1px;
-   width: auto;
-   padding:1px;
-   text-align: center;
-   font-family:Helvetica,Arial;
-   opacity: .5;
-   filter: alpha(opacity=50);
-   -ms-filter:"progid:DXImageTransform.Microsoft.Alpha(Opacity=50)";
-   background-color: white;
+        .sunglasses-tint.active {
+            opacity: 1;
+        }
 
+        .final-state .crt-frame {
+            filter: sepia(0.55) contrast(1.05) brightness(0.9) saturate(1.15) calc(hue-rotate(-5deg));
+        }
 
-}
+        /* Animations for CRT Simulation */
+        @keyframes crt-flicker-anim {
+            0% { opacity: 0.15; }
+            50% { opacity: 0.02; }
+            100% { opacity: 0.2; }
+        }
 
-#Contact:hover {
-opacity: .4;
-filter: alpha(opacity=30);
--ms-filter:"progid:DXImageTransform.Microsoft.Alpha(Opacity=30)";
-background-color: white;
-font-weight: 200;
+        @keyframes crt-displacement {
+            0% { transform: translate(0, 0) scale(1); }
+            20% { transform: translate(-2px, 1px) scale(1.01); }
+            40% { transform: translate(1px, -1px) scale(1.005); }
+            60% { transform: translate(-1px, -2px) scale(1.015) skewX(1deg); }
+            80% { transform: translate(2px, 2px) scale(1); }
+            100% { transform: translate(0, 0) scale(1.002); }
+        }
 
- }
+        .hero-credit {
+            font-size: 0.75rem;
+            padding: 16px var(--padding-mobile);
+            color: #555;
+            background-color: var(--bg-color);
+        }
 
+        /* About Section */
+        #about {
+            padding: 24px var(--padding-mobile) 48px var(--padding-mobile);
+            font-size: 1.1rem;
+            line-height: 1.7;
+            max-width: 850px;
+            letter-spacing: -0.01em;
+        }
 
-#Credit {
-position:absolute; bottom:5px; right:7px;
-font-weight: 100;
-   font-size:85%;
-font-family:Helvetica,Arial;
-     color:#D4D4D4;
-     z-index:;
+        #about strong {
+            font-weight: 700;
+        }
 
-}
+        /* Contact Banner */
+        #contact-banner {
+            background-color: var(--accent-color);
+            padding: 16px var(--padding-mobile);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
 
-#background {
-    width: 100%;
-    height: 100%;
-    position: absolute;
-    left: 0px;
-    top: 0px;
-    z-index: 0;
-}
+        .banner-link {
+            text-decoration: underline;
+            text-underline-offset: 3px;
+            text-decoration-thickness: 1px;
+        }
 
-.stretch {
-    width:100%;
-    height:100%;
-}
+        /* Work Sections Placeholder spacing */
+        #work {
+            padding-bottom: 30px;
+        }
 
-</STYLE>
+        /* Footer */
+        #footer {
+            padding: 24px var(--padding-mobile) 48px var(--padding-mobile);
+            display: flex;
+            gap: 12px;
+        }
 
-<script type="text/javascript" src="http://twitter.com/javascripts/blogger.js"></script>
-<script type="text/javascript" src="http://twitter.com/statuses/user_timeline/delusho.json?callback=twitterCallback2&count=1"></script>
+        .social-icon {
+            width: 24px;
+            height: 24px;
+            fill: var(--text-color);
+            transition: transform 0.2s ease;
+        }
 
+        .social-icon:hover {
+            transform: scale(1.05);
+        }
 
- </head>
-  <body>
+        /* Animations */
+        .reveal {
+            opacity: 0;
+            transform: translateY(15px);
+            transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+        }
 
- <div id="background">
-     <img src="https://images.unsplash.com/photo-1577255714682-69db9b067fda?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1500&q=80" class="stretch" alt="" />
-    <!---PPhoto by Zach Lezniewicz on Unsplash !-->
- </div>
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
 
+        /* Responsive Adjustments */
+        @media (min-width: 768px) {
+            :root {
+                --sidebar-width: 80px;
+            }
+            .sidebar-text {
+                font-size: 1.8rem;
+            }
+            .hero-credit, #contact-banner {
+                padding-left: var(--padding-desktop);
+                padding-right: var(--padding-desktop);
+            }
+            #about, #footer {
+                padding-left: var(--padding-desktop);
+                padding-right: var(--padding-desktop);
+            }
+            #about {
+                font-size: 1.35rem;
+                line-height: 1.8;
+            }
+        }
+    </style>
+</head>
+<body>
 
-  <div id="container">
-  <div id="Name">Daniel Ernesto Moser</div>
-<div id="Detail">
-<a title="mailto:contact[at]danielmoser.me" href="mailto:contact[at]danielmoser.me"> contact[at]danielmoser.me</a>
-</div>
+    <!-- Sidebar Injected Here -->
+    <aside id="sidebar"></aside>
 
-</div>
-<div id="Contact"><a title="mailto:contact[at]danielmoser.me" href="mailto:contact[at]danielmoser.me">contact[at]danielmoser.me</a> &nbsp; <a href="https://twitter.com/_dmoser" target="_blank">twitter</a> </div>
-<div id="Credit">
+    <main id="main-content">
+        <!-- CRT Dynamic Intro Container -->
+        <section id="hero" class="reveal"></section>
+        <section id="about" class="reveal"></section>
+        <section id="contact-banner" class="reveal"></section>
+        <section id="work"></section>
+        <footer id="footer" class="reveal"></footer>
+    </main>
 
+    <script>
+        /* =========================
+           CONFIG / CONTENT
+           ========================= */
+        
+        const CONTENT = {
+            siteName: "daniel moser",
+            hero: {
+                // Updated relative paths matching your committed GitHub assets
+                imageA: "IMG_3366.jpeg", // Mountain context
+                imageB: "IMG_3367.jpeg", // The person context
+                altA: "Atmospheric landscape frame",
+                altB: "Daniel Moser portrait frame",
+                credit: "Sequence: Transmission 01 // Structural Dynamics & Human Form"
+            },
+            about: "My work is driven by a fundamental curiosity about how thoughtful environments are built and experienced. I explore the intersection of <strong>systemic functionality</strong> and <strong>tangible aesthetics</strong>, blending a perspective on urbanity with a deep appreciation for architectural form, design, and craftsmanship. This platform serves as a curated intersection of these disciplines, focusing on the enduring principles that give both large-scale structures and intimate spaces and forms their substance and character.",
+            contactBanner: {
+                left: "<a href='mailto:hello@danielmoser.me' class='banner-link'>contact</a> for dialogue and project inquiries",
+                right: ""
+            },
+            workCategories: [], 
+            socials: [
+                { 
+                    name: "Instagram", 
+                    url: "https://www.instagram.com/dan.unofficial?igsh=bHN6NzA0dXd2MW02&utm_source=qr", 
+                    iconSvg: '<svg class="social-icon" viewBox="0 0 24 24"><path d="M12 2C6.477 2 2 6.477 2 12c0 5.523 4.477 10 10 10s10-4.477 10-10c0-5.523-4.477-10-10-10zm3.955 14h-7.91C6.917 16 6 15.083 6 13.955v-3.91C6 8.917 6.917 8 8.045 8h7.91C17.083 8 18 8.917 18 10.045v3.91C18 15.083 17.083 16 15.955 16zM12 9.5a2.5 2.5 0 1 0 0 5 2.5 2.5 0 0 0 0-5zm3.5-.5a1 1 0 1 0 0-2 1 1 0 0 0 0 2z"/></svg>' 
+                },
+                { 
+                    name: "LinkedIn", 
+                    url: "https://www.linkedin.com/in/danielernestomoser?utm_source=share_via&utm_content=profile&utm_medium=member_ios", 
+                    iconSvg: '<svg class="social-icon" viewBox="0 0 24 24"><path d="M12 2C6.477 2 2 6.477 2 12c0 5.523 4.477 10 10 10s10-4.477 10-10c0-5.523-4.477-10-10-10zM8.5 16.5h-2v-6h2v6zm-1-7.2c-.66 0-1.2-.54-1.2-1.2s.54-1.2 1.2-1.2 1.2.54 1.2 1.2-.54 1.2-1.2 1.2zm9 7.2h-2v-3.5c0-1.42-1.5-1.18-1.5 0v3.5h-2v-6h2v.84c1.1-1.04 3.5-.8 3.5 2.26v2.9z"/></svg>' 
+                },
+                {
+                    name: "X",
+                    url: "https://x.com/_dmoser?s=11",
+                    iconSvg: '<svg class="social-icon" viewBox="0 0 24 24"><path d="M12 2C6.477 2 2 6.477 2 12s4.477 10 10 10 10-4.477 10-10S17.523 2 12 2zm3.2 14h-1.8l-2.6-3.6-2.6 3.6H6.4l3.4-4.5-3.2-4.5h1.8l2.2 3.1 2.2-3.1h1.8l-3 4.1 3.4 4.9z"/></svg>'
+                }
+            ]
+        };
 
-</div>
+        /* =========================
+           RENDER & INTERACTION LOGIC
+           ========================= */
+        
+        document.addEventListener("DOMContentLoaded", () => {
+            
+            // Render Sidebar
+            document.getElementById('sidebar').innerHTML = `
+                <div class="sidebar-text">${CONTENT.siteName}</div>
+            `;
 
+            // Render Hero with CRT Structure
+            document.getElementById('hero').innerHTML = `
+                <div class="crt-viewport glitching" id="crt-viewport">
+                    <img src="${CONTENT.hero.imageA}" alt="${CONTENT.hero.altA}" class="crt-frame active" id="frame-a">
+                    <img src="${CONTENT.hero.imageB}" alt="${CONTENT.hero.altB}" class="crt-frame" id="frame-b">
+                    <div class="crt-scanlines"></div>
+                    <div class="crt-flicker"></div>
+                    <div class="sunglasses-tint" id="tint-layer"></div>
+                </div>
+                <p class="hero-credit">${CONTENT.hero.credit}</p>
+            `;
 
-  </body>
+            // Render About
+            document.getElementById('about').innerHTML = `
+                ${CONTENT.about}
+            `;
+
+            // Render Contact Banner
+            document.getElementById('contact-banner').innerHTML = `
+                <div>${CONTENT.contactBanner.left}</div>
+                <div>${CONTENT.contactBanner.right}</div>
+            `;
+
+            // Render Footer
+            const footerContainer = document.getElementById('footer');
+            let socialsHTML = '';
+            CONTENT.socials.forEach(social => {
+                socialsHTML += `
+                    <a href="${social.url}" aria-label="${social.name}" target="_blank" rel="noopener noreferrer">
+                        ${social.iconSvg}
+                    </a>
+                `;
+            });
+            footerContainer.innerHTML = socialsHTML;
+
+            /* =========================
+               CRT VIDEO INTRO LOGIC
+               ========================= */
+            const viewport = document.getElementById('crt-viewport');
+            const frameA = document.getElementById('frame-a');
+            const frameB = document.getElementById('frame-b');
+            const tintLayer = document.getElementById('tint-layer');
+
+            let switchCount = 0;
+            const maxSwitches = 18; // Number of times it switches back and forth before ending
+            
+            function runCrtSequence() {
+                if (switchCount < maxSwitches) {
+                    // Alternate between images rapidly
+                    if (frameA.classList.contains('active')) {
+                        frameA.classList.remove('active');
+                        frameB.classList.add('active');
+                    } else {
+                        frameB.classList.remove('active');
+                        frameA.classList.add('active');
+                    }
+                    switchCount++;
+                    
+                    // Generate random organic rapid intervals akin to Red Alert dynamic command interfaces
+                    let nextTick = Math.random() * 90 + 40; 
+                    if (switchCount > maxSwitches - 6) {
+                        nextTick += 120; // slow down slightly right before landing
+                    }
+                    setTimeout(runCrtSequence, nextTick);
+                } else {
+                    // End definitely on the person (Image B)
+                    frameA.classList.remove('active');
+                    frameB.classList.add('active');
+                    
+                    // Remove dynamic screen shake/displacement styles
+                    viewport.classList.remove('glitching');
+                    viewport.classList.add('final-state');
+                    
+                    // Activate brown sunglasses filter tint across final asset frame
+                    setTimeout(() => {
+                        tintLayer.classList.add('active');
+                    }, 50);
+                }
+            }
+
+            // Initiate the tactical CRT sequence
+            setTimeout(runCrtSequence, 400);
+
+            /* =========================
+               SCROLL REVEAL MANAGEMENT
+               ========================= */
+            const revealElements = document.querySelectorAll('.reveal');
+            const revealOptions = {
+                threshold: 0.1,
+                rootMargin: "0px 0px -50px 0px"
+            };
+
+            const revealOnScroll = new IntersectionObserver(function(entries, observer) {
+                entries.forEach(entry => {
+                    if (!entry.isIntersecting) {
+                        return;
+                    } else {
+                        entry.target.classList.add('active');
+                        observer.unobserve(entry.target);
+                    }
+                });
+            }, revealOptions);
+
+            revealElements.forEach(el => {
+                revealOnScroll.observe(el);
+            });
+            
+            setTimeout(() => {
+                document.getElementById('hero').classList.add('active');
+            }, 100);
+        });
+    </script>
+</body>
 </html>
