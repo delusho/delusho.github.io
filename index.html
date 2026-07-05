@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Daniel Moser - Portfolio</title>
+    <title>Daniel Ernesto Moser - Portfolio</title>
     
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -16,12 +16,18 @@
            ========================= */
         
         :root {
-            --bg-color: #f4f4f4;
+            --bg-color: #acacac; /* Initial matte grey canvas */
             --text-color: #1a1a1a;
-            --accent-color: #df5d22; /* Burnt orange derived from screenshots */
+            --accent-color: #df5d22; /* Burnt orange */
             --sidebar-width: 60px;
             --padding-mobile: 24px;
             --padding-desktop: 40px;
+        }
+
+        /* Complete style inversion: Grey vanishes into premium dark obsidian */
+        body.content-revealed {
+            --bg-color: #141414;
+            --text-color: #f5f5f5;
         }
 
         * {
@@ -37,6 +43,7 @@
             -webkit-font-smoothing: antialiased;
             -moz-osx-font-smoothing: grayscale;
             overflow-x: hidden;
+            transition: background-color 0.6s cubic-bezier(0.25, 1, 0.5, 1), color 0.6s cubic-bezier(0.25, 1, 0.5, 1);
         }
 
         a {
@@ -55,9 +62,10 @@
             min-height: 100vh;
             display: flex;
             flex-direction: column;
+            position: relative;
         }
 
-        /* Sidebar */
+        /* Sidebar Activation Mechanism */
         #sidebar {
             position: fixed;
             top: 0;
@@ -69,15 +77,85 @@
             align-items: center;
             justify-content: center;
             z-index: 100;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        
+        #sidebar:hover {
+            background-color: #c44f1b;
         }
 
         .sidebar-text {
             writing-mode: vertical-rl;
-            color: var(--text-color);
+            color: #1a1a1a; 
             font-size: 1.5rem;
             font-weight: 700;
             letter-spacing: 0.5px;
             white-space: nowrap;
+            user-select: none;
+        }
+
+        /* Monogram Container (Centered on Initial Canvas) */
+        #monogram-container {
+            padding: var(--padding-mobile);
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 50;
+            transition: opacity 0.4s ease, transform 0.4s ease;
+        }
+
+        .monogram-svg {
+            width: 140px;
+            height: auto;
+        }
+
+        /* Absolute Disappearance: Monogram completely purges from layout on activation */
+        body.content-revealed #monogram-container {
+            display: none !important;
+        }
+
+        #dynamic-portfolio-content {
+            display: none; 
+            flex-direction: column;
+            width: 100%;
+            position: relative;
+        }
+
+        body.content-revealed #dynamic-portfolio-content {
+            display: flex;
+        }
+
+        /* Structural Dismissal Interface (The "X" Control)
+           Optimized to be larger and leaner exactly as depicted in image_2.png */
+        #close-canvas-trigger {
+            position: absolute;
+            top: 24px;
+            right: 24px;
+            width: 56px;  
+            height: 56px; 
+            z-index: 90;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: transparent; 
+            transition: opacity 0.2s ease, transform 0.2s ease;
+            opacity: 0.8;
+        }
+
+        #close-canvas-trigger:hover {
+            opacity: 1;
+            transform: scale(1.05);
+        }
+
+        #close-canvas-trigger svg {
+            width: 100%;
+            height: 100%;
+            stroke: #f5f5f5;
+            stroke-width: 1px; 
+            stroke-linecap: round;
         }
 
         /* Hero Section (CRT TV / Video Simulation) */
@@ -110,14 +188,14 @@
             opacity: 1;
         }
 
-        /* Old CRT Effects Layers */
+        /* CRT Effects Layers */
         .crt-scanlines {
             position: absolute;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06));
+            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 255, 0, 0.06));
             background-size: 100% 4px, 6px 100%;
             z-index: 10;
             pointer-events: none;
@@ -141,33 +219,14 @@
 
         .glitching .crt-frame.active {
             animation: crt-displacement 0.1s infinite;
-            filter: contrast(1.7) brightness(1.2) saturate(1.5);
+            filter: contrast(1.7) brightness(1.2) grayscale(1);
         }
 
-        /* Brown Sunglasses Filter Tint Effect */
-        .sunglasses-tint {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(153, 91, 36, 0.28); /* Warm brown amber tone */
-            mix-blend-mode: multiply;
-            opacity: 0;
-            transition: opacity 1s ease-in-out;
-            z-index: 12;
-            pointer-events: none;
-        }
-
-        .sunglasses-tint.active {
-            opacity: 1;
-        }
-
+        /* Absolute Monochrome Presentation: Transition elements match stark black and white aesthetic */
         .final-state .crt-frame {
-            filter: sepia(0.55) contrast(1.05) brightness(0.9) saturate(1.15) calc(hue-rotate(-5deg));
+            filter: grayscale(1) contrast(1.15) brightness(1.05);
         }
 
-        /* Animations for CRT Simulation */
         @keyframes crt-flicker-anim {
             0% { opacity: 0.15; }
             50% { opacity: 0.02; }
@@ -186,13 +245,14 @@
         .hero-credit {
             font-size: 0.75rem;
             padding: 16px var(--padding-mobile);
-            color: #555;
+            color: #888;
             background-color: var(--bg-color);
+            transition: background-color 0.6s ease;
         }
 
         /* About Section */
         #about {
-            padding: 24px var(--padding-mobile) 48px var(--padding-mobile);
+            padding: 40px var(--padding-mobile) 40px var(--padding-mobile);
             font-size: 1.1rem;
             line-height: 1.7;
             max-width: 850px;
@@ -201,17 +261,23 @@
 
         #about strong {
             font-weight: 700;
+            color: var(--accent-color);
         }
 
-        /* Contact Banner */
+        /* Contact Section Container */
+        #contact-container {
+            margin-top: 20px;
+        }
+
         #contact-banner {
             background-color: var(--accent-color);
-            padding: 16px var(--padding-mobile);
+            padding: 24px var(--padding-mobile);
             display: flex;
-            justify-content: space-between;
-            align-items: center;
-            font-size: 0.8rem;
+            flex-direction: column;
+            gap: 16px;
+            font-size: 0.85rem;
             font-weight: 600;
+            color: #1a1a1a;
         }
 
         .banner-link {
@@ -220,30 +286,77 @@
             text-decoration-thickness: 1px;
         }
 
-        /* Work Sections Placeholder spacing */
-        #work {
-            padding-bottom: 30px;
+        .references-link {
+            text-decoration: underline;
+            text-underline-offset: 4px;
+            cursor: pointer;
+            display: inline-block;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        /* Structural Isolation: State toggles targeting the complete erasure of 
+           the about section and image layout when the separate work interface is opened */
+        body.work-section-open #hero,
+        body.work-section-open #about {
+            display: none !important;
+        }
+
+        /* Completely Separate Standalone Subsection 
+           Reflecting the structural composition requested from image_3.png */
+        #work-references-section {
+            display: none;
+            padding: 80px var(--padding-mobile);
+            background-color: #1c1c1c;
+            border-top: 1px solid #2a2a2a;
+            animation: fadeIn 0.4s cubic-bezier(0.25, 1, 0.5, 1) forwards;
+        }
+
+        body.work-section-open #work-references-section {
+            display: block;
+        }
+
+        /* Content block matching the layout hierarchy structure viewed in image_3.png */
+        .work-list-group {
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+            max-width: 850px;
+        }
+
+        .work-item-row {
+            font-size: 1.25rem;
+            line-height: 1.6;
+            color: #f5f5f5;
+            font-weight: 400;
+            letter-spacing: -0.01em;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(5px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
         /* Footer */
         #footer {
-            padding: 24px var(--padding-mobile) 48px var(--padding-mobile);
+            padding: 40px var(--padding-mobile) 48px var(--padding-mobile);
             display: flex;
-            gap: 12px;
+            gap: 16px;
         }
 
         .social-icon {
             width: 24px;
             height: 24px;
             fill: var(--text-color);
-            transition: transform 0.2s ease;
+            transition: transform 0.2s ease, fill 0.6s ease;
         }
 
         .social-icon:hover {
             transform: scale(1.05);
+            fill: var(--accent-color);
         }
 
-        /* Animations */
+        /* Dynamic Entry Fade */
         .reveal {
             opacity: 0;
             transform: translateY(15px);
@@ -263,7 +376,21 @@
             .sidebar-text {
                 font-size: 1.8rem;
             }
-            .hero-credit, #contact-banner {
+            #close-canvas-trigger {
+                top: 40px;
+                right: 40px;
+                width: 64px;  
+                height: 64px;
+            }
+            #contact-banner {
+                flex-direction: row;
+                justify-content: space-between;
+                align-items: center;
+                padding-left: var(--padding-desktop);
+                padding-right: var(--padding-desktop);
+                gap: 0;
+            }
+            .hero-credit, #work-references-section {
                 padding-left: var(--padding-desktop);
                 padding-right: var(--padding-desktop);
             }
@@ -274,22 +401,92 @@
             #about {
                 font-size: 1.35rem;
                 line-height: 1.8;
+                padding-top: 60px;
+            }
+            .monogram-svg {
+                width: 180px;
             }
         }
     </style>
 </head>
 <body>
 
-    <!-- Sidebar Injected Here -->
-    <aside id="sidebar"></aside>
+    <!-- Sidebar Trigger Configuration -->
+    <aside id="sidebar" onclick="activatePortfolio()">
+        <div class="sidebar-text" id="sidebar-title"></div>
+    </aside>
 
     <main id="main-content">
-        <!-- CRT Dynamic Intro Container -->
-        <section id="hero" class="reveal"></section>
-        <section id="about" class="reveal"></section>
-        <section id="contact-banner" class="reveal"></section>
-        <section id="work"></section>
-        <footer id="footer" class="reveal"></footer>
+        <!-- Flowery & Manly Brutalist Botanical Monogram -->
+        <div id="monogram-container">
+            <svg class="monogram-svg" viewBox="0 0 120 160" xmlns="http://www.w3.org/2000/svg">
+                <!-- Central Heavy Stem -->
+                <line x1="60" y1="15" x2="60" y2="145" stroke="#1a1a1a" stroke-width="8" stroke-linecap="round"/>
+                
+                <!-- Right Side: Massive D-Enclosure Curve -->
+                <path d="M 60,25 C 115,25 115,70 115,90 C 115,115 90,135 60,135" 
+                      fill="none" 
+                      stroke="#1a1a1a" 
+                      stroke-width="7.5" 
+                      stroke-linecap="round"/>
+                
+                <!-- Left Side: Aggressive Sharp Interlocking Bud Curve -->
+                <path d="M 60,40 C 20,50 15,80 30,105 C 40,120 52,128 60,130" 
+                      fill="none" 
+                      stroke="#df5d22" 
+                      stroke-width="7.5" 
+                      stroke-linecap="round"/>
+                
+                <!-- Triple Horizontal Organic Prongs (E-Masking) -->
+                <line x1="38" x2="82" y1="65" y2="65" stroke="#1a1a1a" stroke-width="6" stroke-linecap="round"/>
+                <line x1="45" x2="75" y1="85" y2="85" stroke="#df5d22" stroke-width="5" stroke-linecap="round"/>
+                <line x1="38" x2="82" y1="105" y2="105" stroke="#1a1a1a" stroke-width="6" stroke-linecap="round"/>
+                
+                <!-- Root Base Angled Split (M-Foundation) -->
+                <path d="M 35,145 L 60,115 L 85,145" 
+                      fill="none" 
+                      stroke="#1a1a1a" 
+                      stroke-width="7.5" 
+                      stroke-linecap="round" 
+                      stroke-linejoin="round"/>
+            </svg>
+        </div>
+
+        <!-- Dynamic Context Container (Revealed upon interaction) -->
+        <div id="dynamic-portfolio-content">
+            <!-- Global structural dismiss button configured to stay accessible and cleanly lean -->
+            <div id="close-canvas-trigger" onclick="deactivatePortfolio(event)" aria-label="Close portfolio view">
+                <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <line x1="18" y1="6" x2="6" y2="18"></line>
+                    <line x1="6" y1="6" x2="18" y2="18"></line>
+                </svg>
+            </div>
+
+            <section id="hero"></section>
+            
+            <section id="about" class="reveal"></section>
+            
+            <!-- Contact Bar containing the navigation anchor -->
+            <section id="contact-container" class="reveal">
+                <div id="contact-banner">
+                    <div><a href='mailto:hello@danielmoser.me' class='banner-link'>contact</a> for inquiries</div>
+                    <div>
+                        <span class="references-link" id="toggle-work-btn" onclick="toggleReferences()">See work references</span>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Completely separate standalone section deep in the layout flow -->
+            <section id="work-references-section">
+                <div class="work-list-group">
+                    <div class="work-item-row">Light folding into form, then forgetting its edges.</div>
+                    <div class="work-item-row">A surface thinking about becoming something else.</div>
+                    <div class="work-item-row">Space held briefly, before it decides to dissolve.</div>
+                </div>
+            </section>
+
+            <footer id="footer" class="reveal"></footer>
+        </div>
     </main>
 
     <script>
@@ -298,21 +495,15 @@
            ========================= */
         
         const CONTENT = {
-            siteName: "daniel moser",
+            siteName: "daniel ernesto moser",
             hero: {
-                // Updated relative paths matching your committed GitHub assets
-                imageA: "IMG_3366.jpeg", // Mountain context
-                imageB: "IMG_3367.jpeg", // The person context
+                imageA: "IMG_3366.jpeg", 
+                imageB: "IMG_3367.jpeg", 
                 altA: "Atmospheric landscape frame",
-                altB: "Daniel Moser portrait frame",
+                altB: "Daniel Ernesto Moser portrait frame",
                 credit: "Sequence: Transmission 01 // Structural Dynamics & Human Form"
             },
             about: "My work is driven by a fundamental curiosity about how thoughtful environments are built and experienced. I explore the intersection of <strong>systemic functionality</strong> and <strong>tangible aesthetics</strong>, blending a perspective on urbanity with a deep appreciation for architectural form, design, and craftsmanship. This platform serves as a curated intersection of these disciplines, focusing on the enduring principles that give both large-scale structures and intimate spaces and forms their substance and character.",
-            contactBanner: {
-                left: "<a href='mailto:hello@danielmoser.me' class='banner-link'>contact</a> for dialogue and project inquiries",
-                right: ""
-            },
-            workCategories: [], 
             socials: [
                 { 
                     name: "Instagram", 
@@ -333,40 +524,14 @@
         };
 
         /* =========================
-           RENDER & INTERACTION LOGIC
+           INITIALIZATION
            ========================= */
         
         document.addEventListener("DOMContentLoaded", () => {
-            
-            // Render Sidebar
-            document.getElementById('sidebar').innerHTML = `
-                <div class="sidebar-text">${CONTENT.siteName}</div>
-            `;
+            document.getElementById('sidebar-title').innerText = CONTENT.siteName;
+            initHeroElements();
+            document.getElementById('about').innerHTML = CONTENT.about;
 
-            // Render Hero with CRT Structure
-            document.getElementById('hero').innerHTML = `
-                <div class="crt-viewport glitching" id="crt-viewport">
-                    <img src="${CONTENT.hero.imageA}" alt="${CONTENT.hero.altA}" class="crt-frame active" id="frame-a">
-                    <img src="${CONTENT.hero.imageB}" alt="${CONTENT.hero.altB}" class="crt-frame" id="frame-b">
-                    <div class="crt-scanlines"></div>
-                    <div class="crt-flicker"></div>
-                    <div class="sunglasses-tint" id="tint-layer"></div>
-                </div>
-                <p class="hero-credit">${CONTENT.hero.credit}</p>
-            `;
-
-            // Render About
-            document.getElementById('about').innerHTML = `
-                ${CONTENT.about}
-            `;
-
-            // Render Contact Banner
-            document.getElementById('contact-banner').innerHTML = `
-                <div>${CONTENT.contactBanner.left}</div>
-                <div>${CONTENT.contactBanner.right}</div>
-            `;
-
-            // Render Footer
             const footerContainer = document.getElementById('footer');
             let socialsHTML = '';
             CONTENT.socials.forEach(social => {
@@ -377,21 +542,66 @@
                 `;
             });
             footerContainer.innerHTML = socialsHTML;
+        });
 
-            /* =========================
-               CRT VIDEO INTRO LOGIC
-               ========================= */
+        function initHeroElements() {
+            document.getElementById('hero').innerHTML = `
+                <div class="crt-viewport glitching" id="crt-viewport">
+                    <img src="${CONTENT.hero.imageA}" alt="${CONTENT.hero.altA}" class="crt-frame active" id="frame-a">
+                    <img src="${CONTENT.hero.imageB}" alt="${CONTENT.hero.altB}" class="crt-frame" id="frame-b">
+                    <div class="crt-scanlines"></div>
+                    <div class="crt-flicker"></div>
+                </div>
+                <p class="hero-credit">${CONTENT.hero.credit}</p>
+            `;
+        }
+
+        /* =========================
+           INTERACTION & ACTIVATION CONTROLS
+           ========================= */
+        
+        let isActivated = false;
+        let sequenceTimeout = null;
+
+        function activatePortfolio() {
+            if (isActivated) return; 
+            isActivated = true;
+
+            // Trigger full visual shift (canvas gray shifts to midnight obsidian, monogram instantly vanishes)
+            document.body.classList.add('content-revealed');
+            
+            setupScrollObserver();
+            executeCrtSequence();
+        }
+
+        function deactivatePortfolio(event) {
+            if (event) event.stopPropagation();
+            
+            isActivated = false;
+            if (sequenceTimeout) clearTimeout(sequenceTimeout);
+
+            // Revert document architecture back to original grey minimalist canvas with monogram
+            document.body.classList.remove('content-revealed');
+            document.body.classList.remove('work-section-open');
+
+            document.getElementById('toggle-work-btn').innerText = "See work references";
+
+            // Reset CRT simulation metrics cleanly
+            initHeroElements();
+            window.scrollTo({ top: 0, behavior: 'instant' });
+        }
+
+        function executeCrtSequence() {
             const viewport = document.getElementById('crt-viewport');
             const frameA = document.getElementById('frame-a');
             const frameB = document.getElementById('frame-b');
-            const tintLayer = document.getElementById('tint-layer');
 
             let switchCount = 0;
-            const maxSwitches = 18; // Number of times it switches back and forth before ending
+            const maxSwitches = 18;
             
-            function runCrtSequence() {
+            function runTick() {
+                if (!isActivated) return;
                 if (switchCount < maxSwitches) {
-                    // Alternate between images rapidly
                     if (frameA.classList.contains('active')) {
                         frameA.classList.remove('active');
                         frameB.classList.add('active');
@@ -401,61 +611,60 @@
                     }
                     switchCount++;
                     
-                    // Generate random organic rapid intervals akin to Red Alert dynamic command interfaces
                     let nextTick = Math.random() * 90 + 40; 
                     if (switchCount > maxSwitches - 6) {
-                        nextTick += 120; // slow down slightly right before landing
+                        nextTick += 120; 
                     }
-                    setTimeout(runCrtSequence, nextTick);
+                    sequenceTimeout = setTimeout(runTick, nextTick);
                 } else {
-                    // End definitely on the person (Image B)
                     frameA.classList.remove('active');
                     frameB.classList.add('active');
                     
-                    // Remove dynamic screen shake/displacement styles
                     viewport.classList.remove('glitching');
                     viewport.classList.add('final-state');
-                    
-                    // Activate brown sunglasses filter tint across final asset frame
-                    setTimeout(() => {
-                        tintLayer.classList.add('active');
-                    }, 50);
                 }
             }
 
-            // Initiate the tactical CRT sequence
-            setTimeout(runCrtSequence, 400);
+            sequenceTimeout = setTimeout(runTick, 200);
+        }
 
-            /* =========================
-               SCROLL REVEAL MANAGEMENT
-               ========================= */
+        function toggleReferences() {
+            const btn = document.getElementById('toggle-work-btn');
+            
+            if (document.body.classList.contains('work-section-open')) {
+                document.body.classList.remove('work-section-open');
+                btn.innerText = "See work references";
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            } else {
+                document.body.classList.add('work-section-open');
+                btn.innerText = "Back to About";
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            }
+        }
+
+        function setupScrollObserver() {
             const revealElements = document.querySelectorAll('.reveal');
             const revealOptions = {
-                threshold: 0.1,
-                rootMargin: "0px 0px -50px 0px"
+                threshold: 0.05,
+                rootMargin: "0px 0px -40px 0px"
             };
 
-            const revealOnScroll = new IntersectionObserver(function(entries, observer) {
+            const observer = new IntersectionObserver((entries, observer) => {
                 entries.forEach(entry => {
-                    if (!entry.isIntersecting) {
-                        return;
-                    } else {
+                    if (entry.isIntersecting && isActivated) {
                         entry.target.classList.add('active');
                         observer.unobserve(entry.target);
                     }
                 });
             }, revealOptions);
 
-            revealElements.forEach(el => {
-                revealOnScroll.observe(el);
-            });
+            revealElements.forEach(el => observer.observe(el));
             
             setTimeout(() => {
-                document.getElementById('hero').classList.add('active');
-            }, 100);
-        });
+                if (isActivated) document.getElementById('hero').classList.add('active');
+            }, 50);
+        }
     </script>
 </body>
 </html>
-
 
