@@ -127,8 +127,7 @@
             display: flex;
         }
 
-        /* Structural Dismissal Interface (The "X" Control)
-           Optimized to be larger and leaner exactly as depicted in image_2.png */
+        /* Structural Dismissal Interface (The "X" Control) */
         #close-canvas-trigger {
             position: absolute;
             top: 24px;
@@ -195,7 +194,7 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 255, 0, 0.06));
+            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06));
             background-size: 100% 4px, 6px 100%;
             z-index: 10;
             pointer-events: none;
@@ -219,12 +218,12 @@
 
         .glitching .crt-frame.active {
             animation: crt-displacement 0.1s infinite;
-            filter: contrast(1.7) brightness(1.2) grayscale(1);
+            filter: contrast(1.1) brightness(1.1) sepia(0.15);
         }
 
-        /* Absolute Monochrome Presentation: Transition elements match stark black and white aesthetic */
+        /* Faded Warm Tint Presentation: Low Contrast Film Aesthetic */
         .final-state .crt-frame {
-            filter: grayscale(1) contrast(1.15) brightness(1.05);
+            filter: sepia(0.22) contrast(0.82) brightness(1.02);
         }
 
         @keyframes crt-flicker-anim {
@@ -295,15 +294,13 @@
             letter-spacing: 0.05em;
         }
 
-        /* Structural Isolation: State toggles targeting the complete erasure of 
-           the about section and image layout when the separate work interface is opened */
+        /* Structural Isolation */
         body.work-section-open #hero,
         body.work-section-open #about {
             display: none !important;
         }
 
-        /* Completely Separate Standalone Subsection 
-           Reflecting the structural composition requested from image_3.png */
+        /* Completely Separate Standalone Subsection */
         #work-references-section {
             display: none;
             padding: 80px var(--padding-mobile);
@@ -316,7 +313,6 @@
             display: block;
         }
 
-        /* Content block matching the layout hierarchy structure viewed in image_3.png */
         .work-list-group {
             display: flex;
             flex-direction: column;
@@ -417,7 +413,7 @@
     </aside>
 
     <main id="main-content">
-        <!-- Flowery & Manly Brutalist Botanical Monogram -->
+        <!-- Monogram Container -->
         <div id="monogram-container">
             <svg class="monogram-svg" viewBox="0 0 120 160" xmlns="http://www.w3.org/2000/svg">
                 <!-- Central Heavy Stem -->
@@ -452,9 +448,8 @@
             </svg>
         </div>
 
-        <!-- Dynamic Context Container (Revealed upon interaction) -->
+        <!-- Dynamic Context Container -->
         <div id="dynamic-portfolio-content">
-            <!-- Global structural dismiss button configured to stay accessible and cleanly lean -->
             <div id="close-canvas-trigger" onclick="deactivatePortfolio(event)" aria-label="Close portfolio view">
                 <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <line x1="18" y1="6" x2="6" y2="18"></line>
@@ -466,7 +461,7 @@
             
             <section id="about" class="reveal"></section>
             
-            <!-- Contact Bar containing the navigation anchor -->
+            <!-- Contact Bar -->
             <section id="contact-container" class="reveal">
                 <div id="contact-banner">
                     <div><a href='mailto:hello@danielmoser.me' class='banner-link'>contact</a> for inquiries</div>
@@ -476,7 +471,7 @@
                 </div>
             </section>
 
-            <!-- Completely separate standalone section deep in the layout flow -->
+            <!-- Work References Section -->
             <section id="work-references-section">
                 <div class="work-list-group">
                     <div class="work-item-row">Light folding into form, then forgetting its edges.</div>
@@ -567,7 +562,6 @@
             if (isActivated) return; 
             isActivated = true;
 
-            // Trigger full visual shift (canvas gray shifts to midnight obsidian, monogram instantly vanishes)
             document.body.classList.add('content-revealed');
             
             setupScrollObserver();
@@ -580,13 +574,11 @@
             isActivated = false;
             if (sequenceTimeout) clearTimeout(sequenceTimeout);
 
-            // Revert document architecture back to original grey minimalist canvas with monogram
             document.body.classList.remove('content-revealed');
             document.body.classList.remove('work-section-open');
 
             document.getElementById('toggle-work-btn').innerText = "See work references";
 
-            // Reset CRT simulation metrics cleanly
             initHeroElements();
             window.scrollTo({ top: 0, behavior: 'instant' });
         }
@@ -667,9 +659,3 @@
     </script>
 </body>
 </html>
-
-
-
-
-
-
