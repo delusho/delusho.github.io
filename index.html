@@ -194,7 +194,7 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06));
+            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.04), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.04));
             background-size: 100% 4px, 6px 100%;
             z-index: 10;
             pointer-events: none;
@@ -218,12 +218,12 @@
 
         .glitching .crt-frame.active {
             animation: crt-displacement 0.1s infinite;
-            filter: contrast(1.1) brightness(1.1) sepia(0.15);
+            filter: sepia(0.4) hue-rotate(95deg) contrast(0.8) brightness(0.85);
         }
 
-        /* Faded Warm Tint Presentation: Low Contrast Film Aesthetic */
+        /* Dark Green Sunglasses Aesthetic: Deep olive tint, significantly pulled-back contrast, and lowered brightness */
         .final-state .crt-frame {
-            filter: sepia(0.22) contrast(0.82) brightness(1.02);
+            filter: sepia(0.65) hue-rotate(98deg) saturate(1.1) contrast(0.70) brightness(0.72);
         }
 
         @keyframes crt-flicker-anim {
